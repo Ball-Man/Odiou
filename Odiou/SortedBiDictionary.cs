@@ -15,6 +15,11 @@ namespace Odiou
     public class SortedBiDictionary<TKey, TValue>
     {
         /// <summary>
+        /// Class field used for sortings and binary searches
+        /// </summary>
+        private IComparer<TKey> _comparer;
+
+        /// <summary>
         /// The list of keys
         /// </summary>
         public List<TKey> Keys { get; private set; }
@@ -31,7 +36,7 @@ namespace Odiou
         {
             get
             {
-                int index = (Keys.BinarySearch(key));
+                int index = (Keys.BinarySearch(key, _comparer));
                 if (index >= 0)
                     return Values[index];
                 return default(TValue);
@@ -39,7 +44,7 @@ namespace Odiou
 
             set
             {
-                int index = (Keys.BinarySearch(key));
+                int index = (Keys.BinarySearch(key, _comparer));
                 if (index >= 0)
                     Values[index] = value;
                 else
@@ -66,6 +71,17 @@ namespace Odiou
         }
 
         /// <summary>
+        /// Creates a bidirectional dictionary based on the given order. Requires a sorted keys array
+        /// </summary>
+        /// <param name="keys">The vector of keys</param>
+        /// <param name="values">The vector of values</param>
+        /// <param name="comparer">The comparer used for binary searches</param>
+        public SortedBiDictionary(IEnumerable<TKey> keys, IEnumerable<TValue> values, IComparer<TKey> comparer) : this(keys, values)
+        {
+            _comparer = comparer;
+        }
+
+        /// <summary>
         /// Gets the key corresponding to the first occurence of the given value. If no key was found throws an exception
         /// </summary>
         /// <param name="value">The value used for the look up</param>
@@ -84,7 +100,7 @@ namespace Odiou
         /// <param name="key">The given key</param>
         public TValue GetNearestValue(TKey key)
         {
-            int index = (Keys.BinarySearch(key));
+            int index = (Keys.BinarySearch(key, _comparer));
             if (index >= 0)
                 return Values[index];
             return Values[~index];
