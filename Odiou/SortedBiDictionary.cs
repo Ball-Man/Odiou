@@ -36,7 +36,7 @@ namespace Odiou
         {
             get
             {
-                int index = (Keys.BinarySearch(key));
+                int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
                 if (index >= 0)
                     return Values[index];
                 return default(TValue);
@@ -44,7 +44,7 @@ namespace Odiou
 
             set
             {
-                int index = (Keys.BinarySearch(key));
+                int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
                 if (index >= 0)
                     Values[index] = value;
                 else
@@ -105,7 +105,7 @@ namespace Odiou
         /// <param name="key">The given key</param>
         public TValue GetNearestValue(TKey key)
         {
-            int index = (Keys.BinarySearch(key, _comparer));
+            int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
             if (index >= 0)
                 return Values[index];
             return Values[~index];
