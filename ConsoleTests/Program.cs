@@ -17,6 +17,12 @@ namespace ConsoleTests
 
         static void Main(string[] args)
         {
+            TestNotes();
+            Console.ReadKey();
+        }
+
+        public static void TestTransform()
+        {
             Console.Write("File: ");
             StreamReader reader = new StreamReader(Console.ReadLine());
 
@@ -37,7 +43,12 @@ namespace ConsoleTests
 
             TransformedVector vv = FFT.Transform(buffer, FREQ);
             Console.WriteLine(vv.Carrier);
-            Console.ReadKey();
+        }
+
+        public static void TestNotes()
+        {
+            FFT.ChargeNotes("notes.config");
+            Console.WriteLine(FFT.GetNote(209));
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.IO;
 
 namespace Odiou
 {
@@ -12,6 +13,11 @@ namespace Odiou
     /// </summary>
     public static class FFT
     {
+        /// <summary>
+        /// Field filled with [frequency] = note correspondence
+        /// </summary>
+        static private SortedBiDictionary<int, Note> _notes = new SortedBiDictionary<int, Note>();
+
         /// <summary>
         /// Transforms the vector using FFT algorithm
         /// </summary>
@@ -44,6 +50,32 @@ namespace Odiou
             }
 
             return new TransformedVector(buffer, freq);
+        }
+
+        /// <summary>
+        /// Charges notes from given file
+        /// </summary>
+        /// <param name="fileName">File path</param>
+        public static void ChargeNotes(string fileName)
+        {
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                while (reader.Peek() > 0)
+                {
+                    string[] tmp = reader.ReadLine().Split(':');
+                    _notes[int.Parse(tmp[0])] = Note.Parse(tmp[1]);  
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the nearest note to the given frequency
+        /// </summary>
+        /// <param name="freq">The given frequency(Hz)</param>
+        /// <returns>A Note instance representing the given frequency</returns>
+        public static Note GetNote(int freq)
+        {
+            return _notes.GetNearestValue(freq);
         }
     }
 }

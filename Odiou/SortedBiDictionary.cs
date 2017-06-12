@@ -22,12 +22,12 @@ namespace Odiou
         /// <summary>
         /// The list of keys
         /// </summary>
-        public List<TKey> Keys { get; private set; }
+        public List<TKey> Keys { get; private set; } = new List<TKey>();
 
         /// <summary>
         /// The list of values
         /// </summary>
-        public List<TValue> Values { get; private set; }
+        public List<TValue> Values { get; private set; } = new List<TValue>();
 
         /// <summary>
         /// Gets or sets the value corresponding to the given key
@@ -36,7 +36,7 @@ namespace Odiou
         {
             get
             {
-                int index = (Keys.BinarySearch(key, _comparer));
+                int index = (Keys.BinarySearch(key));
                 if (index >= 0)
                     return Values[index];
                 return default(TValue);
@@ -44,7 +44,7 @@ namespace Odiou
 
             set
             {
-                int index = (Keys.BinarySearch(key, _comparer));
+                int index = (Keys.BinarySearch(key));
                 if (index >= 0)
                     Values[index] = value;
                 else
@@ -55,6 +55,11 @@ namespace Odiou
                 }
             }
         }
+
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        public SortedBiDictionary() { }
 
         /// <summary>
         /// Creates a bidirectional dictionary. Requires a sorted keys array
