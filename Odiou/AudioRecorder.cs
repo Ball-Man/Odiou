@@ -33,11 +33,18 @@ namespace Odiou
         /// Basic constructor
         /// </summary>
         /// <param name="id">The selected device's index(from the Devices array)</param>
-        public AudioRecorder(int id)
+        /// <param name="bufferSize">Audio buffer size in milliseconds</param>
+        public AudioRecorder(int id, int bufferSize)
         {
-            _recorder = new WasapiCapture(new MMDeviceEnumerator().EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active)[id]);
+            _recorder = new WasapiCapture(new MMDeviceEnumerator().EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active)[id], false, bufferSize);
             _recorder.DataAvailable += (s, e) => BufferFull.Invoke(s, new AudioEventArgs(e));
         }
+
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        /// <param name="id">The selected device's index(from the Devices array)</param>
+        public AudioRecorder(int id) : this(id, 100) { }
 
         /// <summary>
         /// Improved constructor, specifies the wanted wave format
