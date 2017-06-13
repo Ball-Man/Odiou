@@ -38,7 +38,7 @@ namespace Odiou
         /// <param name="freq">The sample frequency of the original signal</param>
         public TransformedVector(Complex[] values, int freq)
         {
-            Values = new SortedBiDictionary<int, Complex>(Enumerable.Range(0, values.Length).Select(x => x * freq / values.Length), values);
+            Values = new SortedBiDictionary<int, Complex>(Enumerable.Range(0, values.Length).Select(x => (int)Math.Round(((double)x) * freq / values.Length)), values, new IntDifferencer());
         }
     }
 }

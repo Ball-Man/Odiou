@@ -13,11 +13,12 @@ namespace Odiou
     /// <typeparam name="TKey">Type used for keys</typeparam>
     /// <typeparam name="TValue">Type used for values</typeparam>
     public class SortedBiDictionary<TKey, TValue>
+        where TKey : IComparable<TKey>
     {
         /// <summary>
         /// Class field used for sortings and binary searches
         /// </summary>
-        private IComparer<TKey> _comparer;
+        private IDifferencer<TKey> _comparer;
 
         /// <summary>
         /// The list of keys
@@ -36,7 +37,7 @@ namespace Odiou
         {
             get
             {
-                int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
+                int index = Keys.BinarySearch(key, _comparer);
                 if (index >= 0)
                     return Values[index];
                 return default(TValue);
@@ -44,7 +45,7 @@ namespace Odiou
 
             set
             {
-                int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
+                int index = Keys.BinarySearch(key, _comparer);
                 if (index >= 0)
                     Values[index] = value;
                 else
@@ -81,7 +82,7 @@ namespace Odiou
         /// <param name="keys">The vector of keys</param>
         /// <param name="values">The vector of values</param>
         /// <param name="comparer">The comparer used for binary searches</param>
-        public SortedBiDictionary(IEnumerable<TKey> keys, IEnumerable<TValue> values, IComparer<TKey> comparer) : this(keys, values)
+        public SortedBiDictionary(IEnumerable<TKey> keys, IEnumerable<TValue> values, IDifferencer<TKey> comparer) : this(keys, values)
         {
             _comparer = comparer;
         }
@@ -105,10 +106,15 @@ namespace Odiou
         /// <param name="key">The given key</param>
         public TValue GetNearestValue(TKey key)
         {
-            int index = _comparer != null ? Keys.BinarySearch(key, _comparer) : Keys.BinarySearch(key);
+            int index = Keys.BinarySearch(key, _comparer);
             if (index >= 0)
                 return Values[index];
-            return Values[~index];
+            if (~index == 0)
+                return Values[~index];
+
+            if (Math.Abs(_comparer.Difference(key, Keys[~index])) <= Math.Abs(_comparer.Difference(key, Keys[~index - 1])))
+                return Values[~index];
+            return Values[~index - 1];
         }
     }
 }

@@ -48,7 +48,8 @@ namespace ConsoleTests
         public static void TestNotes()
         {
             FFT.ChargeNotes("notes.config");
-            Console.WriteLine(FFT.GetNote(209));
+            while(true)
+                Console.WriteLine(FFT.GetNote(int.Parse(Console.ReadLine())));
         }
     }
 }

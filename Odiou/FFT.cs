@@ -16,7 +16,7 @@ namespace Odiou
         /// <summary>
         /// Field filled with [frequency] = note correspondence
         /// </summary>
-        static private SortedBiDictionary<int, Note> _notes = new SortedBiDictionary<int, Note>();
+        static private SortedBiDictionary<int, Note> _notes = new SortedBiDictionary<int, Note>(new List<int>(), new List<Note>(), new IntDifferencer());
 
         /// <summary>
         /// Transforms the vector using FFT algorithm
