@@ -11,17 +11,24 @@ namespace Odiou
     /// </summary>
     public class ReverseBitSorting : IComparer<int>
     {
+
+        /// <summary>
+        /// Bits of the max reachable value for the session
+        /// </summary>
+        private int _bits;
+
+        /// <summary>
+        /// Implementation of IComparer, compares two integers based on their reverse form
+        /// </summary>
         public int Compare(int a, int b)
         {
-            int bits = (int)(Math.Log(Math.Max(a, b)) / Math.Log(2));
-
             int ra = 0, rb = 0;
-            for (int i = 1; i <= bits; i++)
+            for (int i = 1; i <= _bits; i++)
             {
-                if ((a & 1 << (bits - i)) != 0)
+                if ((a & 1 << (_bits - i)) != 0)
                     ra |= 1 << (i - 1);
 
-                if ((b & 1 << (bits - i)) != 0)
+                if ((b & 1 << (_bits - i)) != 0)
                     rb |= 1 << (i - 1);
             }
 
@@ -30,6 +37,15 @@ namespace Odiou
             else if (ra < rb)
                 return -1;
             return 0;
+        }
+
+        /// <summary>
+        /// Constructor, requires the max number of bits for this session
+        /// </summary>
+        /// <param name="bits">The number of bits of the max value from the vector</param>
+        public ReverseBitSorting(int bits)
+        {
+            _bits = bits;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ConsoleTests
             Array.Copy(list.Select(x => new Complex(x, 0)).ToArray(), buffer, list.Count);
 
             int[] keys = Enumerable.Range(0, buffer.Length).ToArray();
-            Array.Sort(keys, buffer, new ReverseBitSorting());
+            Array.Sort(keys, buffer, new ReverseBitSorting((int)(Math.Log(LEN)/Math.Log(2))));
 
             TransformedVector vv = FFT.Transform(buffer, FREQ);
             Console.WriteLine(vv.Carrier);
