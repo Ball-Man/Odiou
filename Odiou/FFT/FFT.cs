@@ -49,7 +49,9 @@ namespace Odiou
                 }
             }
 
-            return new TransformedVector(buffer, freq);
+            int samples = buffer.Length;
+            Array.Resize(ref buffer, buffer.Length / 2);
+            return new TransformedVector(buffer, samples, freq);
         }
 
         /// <summary>
