@@ -37,7 +37,7 @@ namespace Odiou
         public AudioRecorder(int id, int bufferSize)
         {
             _recorder = new WasapiCapture(new MMDeviceEnumerator().EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active)[id], false, bufferSize);
-            _recorder.DataAvailable += (s, e) => BufferFull.Invoke(s, new AudioEventArgs(e));
+            _recorder.DataAvailable += (s, e) => BufferGotData?.Invoke(s, new AudioEventArgs(e));
         }
 
         /// <summary>
@@ -54,6 +54,19 @@ namespace Odiou
         /// <param name="bits">Bit depth</param>
         /// <param name="channels">Number of channels</param>
         public AudioRecorder(int id, int sampleFreq, int bits, int channels) : this(id)
+        {
+            _recorder.WaveFormat = new WaveFormat(sampleFreq, bits, channels);
+        }
+
+        /// <summary>
+        /// Improved constructor, specifies the wanted wave format
+        /// </summary>
+        /// <param name="id">The selected device's index(from the Devices array)</param>
+        /// <param name="sampleFreq">Sampling frequency(Hz)</param>
+        /// <param name="bits">Bit depth</param>
+        /// <param name="channels">Number of channels</param>
+        /// <param name="bufferSize">Audio buffer size in milliseconds</param>
+        public AudioRecorder(int id, int sampleFreq, int bits, int channels, int bufferSize) : this(id, bufferSize)
         {
             _recorder.WaveFormat = new WaveFormat(sampleFreq, bits, channels);
         }
@@ -77,6 +90,6 @@ namespace Odiou
         /// <summary>
         /// Occurs when the audio buffer is full and it needs to be processed
         /// </summary>
-        public event EventHandler<AudioEventArgs> BufferFull;
+        public event EventHandler<AudioEventArgs> BufferGotData;
     }
 }

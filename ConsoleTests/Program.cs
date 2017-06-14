@@ -15,7 +15,7 @@ namespace ConsoleTests
                 Console.WriteLine(x);
 
             AudioRecorder recorder = new AudioRecorder(int.Parse(Console.ReadLine()));
-            recorder.BufferFull += (s, e) => Console.WriteLine(e.Bytes);
+            recorder.BufferGotData += (s, e) => Console.WriteLine(e.Bytes);
 
             recorder.Start();
             Console.ReadKey();

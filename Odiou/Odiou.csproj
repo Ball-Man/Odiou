@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioEventArgs.cs" />
-    <Compile Include="AudioRecorder.cs" />
+    <Compile Include="Recorder\AudioEventArgs.cs" />
+    <Compile Include="Recorder\AudioRecorder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
