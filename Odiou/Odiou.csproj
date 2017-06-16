@@ -47,7 +47,20 @@
   <ItemGroup>
     <Compile Include="Recorder\AudioEventArgs.cs" />
     <Compile Include="Recorder\AudioRecorder.cs" />
+    <Compile Include="BiDictionary\IDifferencer.cs" />
+    <Compile Include="BiDictionary\IntDifferencer.cs" />
+    <Compile Include="FFT\Note.cs" />
+    <Compile Include="FFT\RelativeNote.cs" />
+    <Compile Include="BiDictionary\SortedBiDictionary.cs" />
+    <Compile Include="FFT\FFT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FFT\ReverseBitSorting.cs" />
+    <Compile Include="FFT\TransformedVector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="notes.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

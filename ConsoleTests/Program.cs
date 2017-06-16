@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
+using System.IO;
 using Odiou;
 
 namespace ConsoleTests
@@ -11,15 +13,7 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            foreach (string x in AudioRecorder.Devices)
-                Console.WriteLine(x);
-
-            AudioRecorder recorder = new AudioRecorder(int.Parse(Console.ReadLine()));
-            recorder.BufferGotData += (s, e) => Console.WriteLine(e.Bytes);
-
-            recorder.Start();
-            Console.ReadKey();
-            recorder.Stop();
+            
         }
     }
 }
