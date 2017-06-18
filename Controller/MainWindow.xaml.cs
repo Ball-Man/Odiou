@@ -67,6 +67,17 @@ namespace Controller
             //Settings initialization
             cmbDevice.ItemsSource = AudioRecorder.Devices;
             cmbDevice.SelectedIndex = 0;
+
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
+            lstCommands.Items.Add(1);
         }
 
         // ************* Menu ************* //

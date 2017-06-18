@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Controller"
+        xmlns:windowsinput="clr-namespace:WindowsInput;assembly=InputSimulator"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -16,6 +18,14 @@
         Title="Odiou" Height="450" Width="600" ResizeMode="CanMinimize" WindowStyle="None" MouseDown="Window_MouseClick"
         Loaded="Window_Loaded">
     <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="KeysEnum">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="windowsinput:VirtualKeyCode" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <!--
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -25,9 +35,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>
+    </Window.Resources> -->
+    
     <DockPanel>
-
+    
         <!-- Menu -->
         <ToolBarPanel DockPanel.Dock="Top">
             <ToolBar ClipToBounds="False">
@@ -85,6 +96,28 @@
 
             <!-- Right side -->
             <Expander Grid.Column="1">
+                <ListBox Name="lstCommands" Height="300">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Padding="10">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Note:" />
+                                        <TextBox MaxLength="4" Width="35" />
+                                        <Label Content="Key:" Margin="10 0 0 0" />
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource KeysEnum}}" Width="200" SelectedIndex="0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Keep" />
+                                        <CheckBox />
+                                        <Label Content="Delay(ms):" Margin="28 0 0 0" />
+                                        <TextBox MaxLength="5" Width="40" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Expander>
         </Grid>
 
