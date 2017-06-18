@@ -13,7 +13,8 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Odiou" Height="400" Width="600" ResizeMode="CanMinimize" WindowStyle="None" MouseDown="Window_MouseClick">
+        Title="Odiou" Height="450" Width="600" ResizeMode="CanMinimize" WindowStyle="None" MouseDown="Window_MouseClick"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,18 +31,18 @@
         <!-- Menu -->
         <ToolBarPanel DockPanel.Dock="Top">
             <ToolBar ClipToBounds="False">
-                <Button Name="btnNote">
+                <Button Name="btnNote" Click="Menu_Click">
                     <Button.Content>
                         <materialDesign:PackIcon Kind="GuitarElectric" />
                     </Button.Content>
                 </Button>
-                <Button Name="btnAnalysis">
+                <Button Name="btnAnalysis" Click="Menu_Click">
                     <Button.Content>
                         <materialDesign:PackIcon Kind="Pulse" />
                     </Button.Content>
                 </Button>
                 <Separator />
-                <Button Name="btnSettings">
+                <Button Name="btnSettings" Click="Menu_Click">
                     <Button.Content>
                         <materialDesign:PackIcon Kind="Settings" />
                     </Button.Content>
@@ -54,24 +55,27 @@
                 </Button>
             </ToolBar>
         </ToolBarPanel>
-
+        
+        <!-- Error bar -->
+        <materialDesign:Card Name="crdError" DockPanel.Dock="Bottom" Height="30" Padding="5" Margin="0 5 0 0" />
+        
         <!-- Play tab -->
-        <Grid>
+        <Grid Name="grdPlay" IsEnabled="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
-            
+
             <!-- Left side -->
-            <StackPanel Grid.Column="0">
+            <StackPanel Grid.Column="0" Margin="10">
                 <TextBlock Name="txtNote" FontSize="80" TextAlignment="Center" Text="C" FontWeight="Bold" Margin="0 80 0 0"/>
-                <StackPanel Orientation="Horizontal" Margin="0 80 0 0" HorizontalAlignment="Center">
-                    <Button Name="btnStart" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Green" Margin="0 0 15 0">
+                <StackPanel Orientation="Horizontal" Margin="0 60 0 0" HorizontalAlignment="Center">
+                    <Button Name="btnStartLive" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Green" Margin="0 0 15 0" Click="btnStartLive_Click">
                         <Button.Content>
                             <materialDesign:PackIcon Kind="Play" />
                         </Button.Content>
                     </Button>
-                    <Button Name="btnStop" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Red">
+                    <Button Name="btnStopLive" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Red" IsEnabled="False" Click="btnStopLive_Click">
                         <Button.Content>
                             <materialDesign:PackIcon Kind="Stop" />
                         </Button.Content>
@@ -84,6 +88,34 @@
             </Expander>
         </Grid>
 
+        <!-- Analyze tab -->
+        <Grid Name="grdAnalysis" Visibility="Collapsed" IsEnabled="False">
+            <!-- TODO: analysis graphics -->
+        </Grid>
+        
+        <!-- Settings -->
+        <Grid Name="grdSettings" Visibility="Collapsed">
+            <StackPanel Margin="10">
+                <Label Content="Audio device:"/>
+                <ComboBox Name="cmbDevice" Width="250" HorizontalAlignment="Left"/>
+                <Label Content="Sample rate(Hz):" Margin="0 20 0 0"/>
+                <TextBox Name="txtSampleRate" Text="48000" Width="200" MaxLength="6" HorizontalAlignment="Left"/>
+                <Label Content="Bit depth:" Margin="0 10 0 0"/>
+                <TextBox Name="txtBitDepth" Text="32" Width="50" MaxLength="2" HorizontalAlignment="Left"/>
+                <Label Content="Channels:" Margin="0 10 0 0" />
+                <TextBox Name="txtChannels" Text="2"  Width="50" MaxLength="1" HorizontalAlignment="Left" />
+                <Label Content="Buffer length(ms):" Margin="0 10 0 0" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Name="txtBuffer" Text="100" Width="50" MaxLength="1" HorizontalAlignment="Left" />
+                    <Button Name="btnSaveSettings" Margin="150 0 0 0" Click="btnSaveSettings_Click">
+                        <Button.Content>
+                            <materialDesign:PackIcon Kind="Floppy"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            
+        </Grid>
         <!-- <materialDesign:Flipper Width="100" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
             <materialDesign:Flipper.FrontContent>
                 <materialDesign:Card Height="150">
