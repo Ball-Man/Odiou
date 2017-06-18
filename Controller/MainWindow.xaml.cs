@@ -34,6 +34,7 @@ namespace Controller
 
         //Controller for the live audio recognition
         LiveAudioController liveController;
+        NoteInterpreter interpreter;
 
         //Controller for the menu tab switching
         MenuController menu;
@@ -68,16 +69,11 @@ namespace Controller
             cmbDevice.ItemsSource = AudioRecorder.Devices;
             cmbDevice.SelectedIndex = 0;
 
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
-            lstCommands.Items.Add(1);
+            interpreter = new NoteInterpreter();
+            interpreter.Associations.Add(new NoteControl(Note.Parse("D2"), VirtualKeyCode.VK_A, true, 0));
+            interpreter.Associations.Add(new NoteControl(Note.Parse("G2"), VirtualKeyCode.VK_D, true, 0));
+            liveController.Interpreter = interpreter;
+            lstCommands.ItemsSource = liveController.Interpreter.Associations;
         }
 
         // ************* Menu ************* //
@@ -105,6 +101,7 @@ namespace Controller
         {
             btnStartLive.IsEnabled = false;
             btnStopLive.IsEnabled = true;
+            lstCommands.IsEnabled = false;
 
             try
             {
@@ -131,6 +128,7 @@ namespace Controller
         {
             btnStartLive.IsEnabled = true;
             btnStopLive.IsEnabled = false;
+            lstCommands.IsEnabled = true;
 
             liveController.Stop();
         }
@@ -159,6 +157,8 @@ namespace Controller
             //Stops live execution and sets the new audio device
             StopLive();
             liveController = new LiveAudioController(new AudioRecorder(deviceID, freq, depth, channels, buffer), txtNote, this.Dispatcher);
+            liveController.Interpreter = interpreter;
+            lstCommands.ItemsSource = liveController.Interpreter.Associations;
 
             //Enables everything(everything is disabled till the user chooses the settings)
             menu.Enable(true);

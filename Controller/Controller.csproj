@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MenuController.cs" />
+    <Compile Include="NoteControl.cs" />
+    <Compile Include="NoteInterpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

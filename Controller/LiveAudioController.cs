@@ -19,7 +19,7 @@ namespace Controller
         /// <summary>
         /// The recorder used
         /// </summary>
-        private AudioRecorder _recorder;
+        public AudioRecorder Recorder { get; set; }
 
         /// <summary>
         /// Number of bits used as size of the FFT buffer(2^bits)
@@ -27,14 +27,19 @@ namespace Controller
         public int PrecisionBits { get; set; }
 
         /// <summary>
+        /// used to execute commands
+        /// </summary>
+        public NoteInterpreter Interpreter { get; set; } = new NoteInterpreter();
+
+        /// <summary>
         /// Creates a controller
         /// </summary>
         /// <param name="recorder">The audio device used by the controller</param>
         public LiveAudioController(AudioRecorder recorder, TextBlock txtNote, Dispatcher dispatcher)
         {
-            _recorder = recorder;
+            Recorder = recorder;
 
-            _recorder.BufferGotData += (s, e) =>
+            Recorder.BufferGotData += (s, e) =>
             {
                 Complex[] buffer = new Complex[e.Bytes / 8];
                 for (int i = 7; i < e.Bytes; i += 8)
@@ -42,9 +47,16 @@ namespace Controller
 
                 Array.Resize(ref buffer, 16384);
                 Array.Sort(Enumerable.Range(0, buffer.Length).ToArray(), buffer, new ReverseBitSorting(14));
-                //Task.Factory.StartNew(() =>
+                
+                //Gets data
                 TransformedVector transformed = FFT.Transform(buffer, 48000);
-                dispatcher.Invoke(() => txtNote.Text = (FFT.GetNote((int)Math.Round(transformed.Carrier))).ToString());
+                Note note = FFT.GetNote((int)Math.Round(transformed.Carrier));
+
+                //Updates UI
+                dispatcher.Invoke(() => txtNote.Text = (note).ToString());
+
+                //Execute the command
+                Interpreter.Execute(FFT.GetNote((int)Math.Round(transformed.Carrier)));
             };
         }
 
@@ -53,7 +65,7 @@ namespace Controller
         /// </summary>
         public void Stop()
         {
-            _recorder.Stop();
+            Recorder.Stop();
         }
 
         /// <summary>
@@ -61,7 +73,7 @@ namespace Controller
         /// </summary>
         public void Start()
         {
-            _recorder.Start();
+            Recorder.Start();
         }
     }
 }
