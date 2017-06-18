@@ -25,6 +25,44 @@ namespace Odiou
         }
 
         /// <summary>
+        /// Returns the sample rate of the audio device
+        /// </summary>
+        public int SampleRate
+        {
+            get
+            {
+                return _recorder.WaveFormat.SampleRate;
+            }
+        }
+
+        /// <summary>
+        /// Returns the bit depth of the audio device
+        /// </summary>
+        public int BitDepth
+        {
+            get
+            {
+                return _recorder.WaveFormat.BitsPerSample;
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of channels of the audio device
+        /// </summary>
+        public int Channels
+        {
+            get
+            {
+                return _recorder.WaveFormat.Channels;
+            }
+        }
+
+        /// <summary>
+        /// Returns the audio buffer length in milliseconds
+        /// </summary>
+        public int Buffer { get; private set; }
+
+        /// <summary>
         /// The actual audio recording class from NAudio
         /// </summary>
         private WasapiCapture _recorder;
@@ -69,6 +107,7 @@ namespace Odiou
         public AudioRecorder(int id, int sampleFreq, int bits, int channels, int bufferSize) : this(id, bufferSize)
         {
             _recorder.WaveFormat = new WaveFormat(sampleFreq, bits, channels);
+            Buffer = bufferSize;
         }
 
         /// <summary>
