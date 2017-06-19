@@ -11,7 +11,7 @@ namespace Odiou
     /// <summary>
     /// High level class for NAudio.WasapiCapture
     /// </summary>
-    public class AudioRecorder
+    public class AudioRecorder : IDisposable
     {
         /// <summary>
         /// String array containing the available audio recording devices' names
@@ -130,5 +130,24 @@ namespace Odiou
         /// Occurs when the audio buffer is full and it needs to be processed
         /// </summary>
         public event EventHandler<AudioEventArgs> BufferGotData;
+
+        //************* DISPOSE *************//
+        //*************         *************//
+        private bool disposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            _recorder.Dispose();
+            disposed = true;
+        }
     }
 }

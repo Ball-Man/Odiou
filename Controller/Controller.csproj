@@ -72,12 +72,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Analysis\AnalysisAudioController.cs">
+      <CustomToolNamespace>Controller</CustomToolNamespace>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Analysis\CanvasManager.cs" />
     <Compile Include="MessageHandler.cs" />
-    <Compile Include="LiveAudioController.cs" />
+    <Compile Include="Live\LiveAudioController.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -85,8 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MenuController.cs" />
-    <Compile Include="NoteControl.cs" />
-    <Compile Include="NoteInterpreter.cs" />
+    <Compile Include="Live\NoteControl.cs" />
+    <Compile Include="Live\NoteInterpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

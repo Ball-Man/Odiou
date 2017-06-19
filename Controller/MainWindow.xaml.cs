@@ -36,6 +36,9 @@ namespace Controller
         LiveAudioController liveController;
         NoteInterpreter interpreter;
 
+        //Controller for the audio analysis
+        AnalysisAudioController analysisController;
+
         //Controller for the menu tab switching
         MenuController menu;
 
@@ -57,9 +60,6 @@ namespace Controller
             //Message handler initialization
             message = new MessageHandler(crdError);
 
-            //Live controller initialization
-            liveController = new LiveAudioController(new AudioRecorder(1, 48000, 32, 2, 100), txtNote, this.Dispatcher);
-
             //Menu initialization
             Button[] menuButtons = new Button[] { btnNote, btnAnalysis, btnSettings };
             Grid[] menuGrids = new Grid[] { grdPlay, grdAnalysis, grdSettings };
@@ -69,9 +69,8 @@ namespace Controller
             cmbDevice.ItemsSource = AudioRecorder.Devices;
             cmbDevice.SelectedIndex = 0;
 
+            //Interpreter initilization
             interpreter = new NoteInterpreter();
-            liveController.Interpreter = interpreter;
-            Bind();
         }
 
         /// <summary>
@@ -108,7 +107,7 @@ namespace Controller
         {
             btnStartLive.IsEnabled = false;
             btnStopLive.IsEnabled = true;
-            lstCommands.IsEnabled = false;
+            stcCommands.IsEnabled = false;
 
             try
             {
@@ -198,9 +197,9 @@ namespace Controller
         {
             btnStartLive.IsEnabled = true;
             btnStopLive.IsEnabled = false;
-            lstCommands.IsEnabled = true;
-
-            liveController.Stop();
+            stcCommands.IsEnabled = true;
+            
+            liveController?.Stop();
         }
 
         /// <summary>
@@ -212,6 +211,39 @@ namespace Controller
             cmbKeyInput.SelectedIndex = 0;
             chcKeepInput.IsChecked = false;
             txtDelayInput.Text = "0";
+        }
+
+        // ************* Analysis ************* //
+        // *************          ************* //
+        private void btnStartAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            btnStopAnalysis.IsEnabled = true;
+            btnStartAnalysis.IsEnabled = false;
+
+            try
+            {
+                analysisController.Start();
+            }
+            catch(Exception)
+            {
+                message.ShowError("Unsopperted wave format, revise you settings", 1500);
+            }
+        }
+
+        private void btnStopAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            StopAnalysis();
+        }
+
+        /// <summary>
+        /// Stops the analysis if it's recording
+        /// </summary>
+        private void StopAnalysis()
+        {
+            btnStopAnalysis.IsEnabled = false;
+            btnStartAnalysis.IsEnabled = true;
+
+            analysisController?.Stop();
         }
 
         // ************* Settings ************* //
@@ -240,6 +272,9 @@ namespace Controller
             liveController = new LiveAudioController(new AudioRecorder(deviceID, freq, depth, channels, buffer), txtNote, this.Dispatcher);
             liveController.Interpreter = interpreter;
             Bind();
+
+            //Sets the new audio device also to the analysis controller
+            analysisController = new AnalysisAudioController(new AudioRecorder(deviceID, freq, depth, channels, buffer), cnvTime, cnvFreq);
 
             //Enables everything(everything is disabled till the user chooses the settings)
             menu.Enable(true);

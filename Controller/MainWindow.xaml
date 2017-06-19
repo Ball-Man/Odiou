@@ -43,26 +43,18 @@
         <ToolBarPanel DockPanel.Dock="Top">
             <ToolBar ClipToBounds="False">
                 <Button Name="btnNote" Click="Menu_Click">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="GuitarElectric" />
-                    </Button.Content>
+                    <materialDesign:PackIcon Kind="GuitarElectric" />
                 </Button>
                 <Button Name="btnAnalysis" Click="Menu_Click">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="Pulse" />
-                    </Button.Content>
+                    <materialDesign:PackIcon Kind="Pulse" />
                 </Button>
                 <Separator />
                 <Button Name="btnSettings" Click="Menu_Click">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="Settings" />
-                    </Button.Content>
+                    <materialDesign:PackIcon Kind="Settings" />
                 </Button>
                 <Separator/>
                 <Button Name="btnClose" Click="btnClose_Click">
-                    <Button.Content>
-                        <materialDesign:PackIcon Kind="CloseBox" />
-                    </Button.Content>
+                    <materialDesign:PackIcon Kind="CloseBox" />
                 </Button>
             </ToolBar>
         </ToolBarPanel>
@@ -71,7 +63,7 @@
         <materialDesign:Card Name="crdError" DockPanel.Dock="Bottom" Height="30" Padding="5" Margin="0 5 0 0" />
         
         <!-- Play tab -->
-        <Grid Name="grdPlay" Width="600" IsEnabled="False">
+        <Grid Name="grdPlay" Width="600" Visibility="Collapsed" IsEnabled="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2*" />
@@ -79,17 +71,13 @@
 
             <!-- Left side -->
             <StackPanel Grid.Column="0" Margin="10">
-                <TextBlock Name="txtNote" FontSize="80" TextAlignment="Center" Text="-" FontWeight="Bold" Margin="0 80 0 0"/>
+                <TextBlock Name="txtNote" FontSize="80" TextAlignment="Center" Text=" " FontWeight="Bold" Margin="0 80 0 0"/>
                 <StackPanel Orientation="Horizontal" Margin="0 60 0 0" HorizontalAlignment="Center">
-                    <Button Name="btnStartLive" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Green" Margin="0 0 15 0" Click="btnStartLive_Click">
-                        <Button.Content>
-                            <materialDesign:PackIcon Kind="Play" />
-                        </Button.Content>
+                    <Button Name="btnStartLive"  Style="{StaticResource MaterialDesignFloatingActionButton}" Background="Green" BorderBrush="Green" Margin="0 0 15 0" Click="btnStartLive_Click">
+                        <materialDesign:PackIcon Kind="Play" />
                     </Button>
-                    <Button Name="btnStopLive" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="Red" IsEnabled="False" Click="btnStopLive_Click">
-                        <Button.Content>
-                            <materialDesign:PackIcon Kind="Stop" />
-                        </Button.Content>
+                    <Button Name="btnStopLive" Style="{StaticResource MaterialDesignFloatingActionButton}" Background="Red" BorderBrush="Red" IsEnabled="False" Click="btnStopLive_Click">
+                        <materialDesign:PackIcon Kind="Stop" />
                     </Button>
                 </StackPanel>
             </StackPanel>
@@ -117,9 +105,7 @@
                                                 <Label Content="Delay(ms):" Margin="28 0 0 0" />
                                                 <TextBox MaxLength="5" Width="40" Text="{Binding Delay}"/>
                                                 <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="20" Height="20" Margin="100 5 0 0" Click="btnRemove_Click">
-                                                    <Button.Content>
-                                                        <materialDesign:PackIcon Kind="Minus" />
-                                                    </Button.Content>
+                                                    <materialDesign:PackIcon Kind="Minus" />
                                                 </Button>
                                             </StackPanel>
                                         </StackPanel>
@@ -144,24 +130,18 @@
                                         <Label Content="Delay(ms):" Margin="28 0 0 0" />
                                         <TextBox Name="txtDelayInput" MaxLength="5" Width="40" Text="0"/>
                                         <Button Name="btnInput" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="20" Height="20" Margin="100 5 0 0" Click="btnInput_Click">
-                                            <Button.Content>
-                                                <materialDesign:PackIcon Kind="Plus" />
-                                            </Button.Content>
+                                            <materialDesign:PackIcon Kind="Plus" />
                                         </Button>
                                     </StackPanel>
 
                                     <!-- Save/Load -->
                                     <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
                                         <Button Name="btnSaveCommands" Click="btnSaveCommands_Click">
-                                            <Button.Content>
-                                                <materialDesign:PackIcon Kind="Floppy" />
-                                            </Button.Content>
+                                            <materialDesign:PackIcon Kind="Floppy" />
                                         </Button>
 
                                         <Button Name="btnLoadCommands" Margin="45 0 0 0" Click="btnLoadCommands_Click">
-                                            <Button.Content>
-                                                <materialDesign:PackIcon Kind="Folder" />
-                                            </Button.Content>
+                                            <materialDesign:PackIcon Kind="Folder" />
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>
@@ -173,12 +153,46 @@
         </Grid>
 
         <!-- Analyze tab -->
-        <Grid Name="grdAnalysis" Visibility="Collapsed" IsEnabled="False">
-            <!-- TODO: analysis graphics -->
+        <Grid Name="grdAnalysis" Width="600" Visibility="Collapsed" IsEnabled="False">
+            <StackPanel Margin="10">
+
+                <!-- Graphics -->
+                <Label Content="Time domain signal:" />
+                <materialDesign:Card Padding="5">
+                    <Grid>
+                        <!-- 
+                        <TextBlock Text="dB" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                        <TextBlock Text="max" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 0 0 0"/>
+                        <TextBlock Text="min" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30 0 0 0"/> -->
+                        <Canvas Name="cnvTime" Width="550" Height="100" HorizontalAlignment="Center" Background="White"/>
+                        
+                    </Grid>
+                </materialDesign:Card>
+                <Label Content="Frequency domain signal:" Margin="0 10 0 0"/>
+                <materialDesign:Card Padding="5">
+                    <Grid>
+                        <!--
+                        <TextBlock Text="dB" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                        <TextBlock Text="max" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 0 0 0"/>
+                        <TextBlock Text="min" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30 0 0 0"/> -->
+                        <Canvas Name="cnvFreq" Width="550" Height="100" HorizontalAlignment="Center" Background="White"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Management -->
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                    <Button Name="btnStartAnalysis" Click="btnStartAnalysis_Click">
+                        <materialDesign:PackIcon Kind="Play" />
+                    </Button>
+                    <Button Name="btnStopAnalysis" IsEnabled="False" Margin="30 0 0 0" Click="btnStopAnalysis_Click">
+                        <materialDesign:PackIcon Kind="Stop" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
         </Grid>
         
         <!-- Settings -->
-        <Grid Name="grdSettings" Visibility="Collapsed">
+        <Grid Name="grdSettings" Visibility="Visible">
             <StackPanel Margin="10">
                 <Label Content="Audio device:"/>
                 <ComboBox Name="cmbDevice" Width="250" HorizontalAlignment="Left"/>
@@ -192,9 +206,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBox Name="txtBuffer" Text="100" Width="50" MaxLength="4" HorizontalAlignment="Left" />
                     <Button Name="btnSaveSettings" Margin="150 0 0 0" Click="btnSaveSettings_Click">
-                        <Button.Content>
-                            <materialDesign:PackIcon Kind="Floppy"/>
-                        </Button.Content>
+                        <materialDesign:PackIcon Kind="Floppy"/>
                     </Button>
                 </StackPanel>
             </StackPanel>
