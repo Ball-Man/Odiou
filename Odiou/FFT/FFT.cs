@@ -23,8 +23,9 @@ namespace Odiou
         /// </summary>
         /// <param name="values">The values of the time domain signal. Length must be a power of 2</param>
         /// <param name="freq">The sampling frequency</param>
+        /// <param name="divide">Tells if the vector has to be divided(only the first part of the vector has interesting data)</param>
         /// <returns>The tranformed vector(TransformedVector)</returns>
-        public static TransformedVector Transform(Complex[] values, int freq)
+        public static TransformedVector Transform(Complex[] values, int freq, bool divide = true)
         {
             Complex[] buffer = (Complex[])values.Clone();
 
@@ -49,9 +50,13 @@ namespace Odiou
                 }
             }
 
-            int samples = buffer.Length;
-            Array.Resize(ref buffer, buffer.Length / 2);
-            return new TransformedVector(buffer, samples, freq);
+            if (divide)
+            {
+                int samples = buffer.Length;
+                Array.Resize(ref buffer, buffer.Length / 2);
+                return new TransformedVector(buffer, samples, freq);
+            }
+            return new TransformedVector(buffer, buffer.Length, freq);
         }
 
         /// <summary>
