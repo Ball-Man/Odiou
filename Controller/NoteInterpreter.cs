@@ -36,6 +36,7 @@ namespace Controller
             Associations = new List<NoteControl>();
             _last = new Note(new RelativeNote('c', false), 0);
             _pushed = new Queue<VirtualKeyCode>();
+            ThreadPool.SetMaxThreads(1, 1);
         }
 
         /// <summary>
@@ -46,17 +47,19 @@ namespace Controller
         {
             for(int i = 0; i < Associations.Count; i++)
             {
-                if(Associations[i].Note == note.ToString())
+                NoteControl association = Associations[i];
+
+                //Releases the kept keys
+                if (!note.Equals(_last))
+                    while (_pushed.Count > 0)
+                        InputSimulator.SimulateKeyUp(_pushed.Dequeue());
+
+
+                if (association.Note == note.ToString())
                 {
-                    if (Associations[i].Note != _last.ToString())
+                    if (!note.Equals(_last))
                     {
-                        NoteControl association = Associations[i];
-
-                        //Key up for all the keys which where pressed
-                        while (_pushed.Count > 0)
-                            InputSimulator.SimulateKeyUp(_pushed.Dequeue());
-
-                        //ThreadPool.QueueUserWorkItem((state) =>
+                        ThreadPool.QueueUserWorkItem((state) =>
                         {
                             Thread.Sleep(association.Delay);
                             if (association.Keep)
@@ -66,11 +69,11 @@ namespace Controller
                             }
                             else
                                 InputSimulator.SimulateKeyPress(association.Key);
-                        };
+                        });
                     }
                 }
-                _last = note;
             }
+            _last = note;
         }
     }
 }
