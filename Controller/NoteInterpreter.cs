@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -73,6 +77,34 @@ namespace Controller
                 }
             }
             _last = note;
+        }
+
+        /// <summary>
+        /// Serializes associations on an xml file
+        /// </summary>
+        /// <param name="filename">File path</param>
+        public void Save(string filename)
+        {
+            using (FileStream stream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (XmlWriter writer = XmlWriter.Create(stream, new XmlWriterSettings() { Indent = true }))
+            { 
+                DataContractSerializer serializer = new DataContractSerializer(typeof(List<NoteControl>));
+                serializer.WriteObject(writer, Associations);
+            }
+        }
+
+        /// <summary>
+        /// Reads associations from an xml file
+        /// </summary>
+        /// <param name="filename">File path</param>
+        public void Load(string filename)
+        {
+            using (FileStream stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(List<NoteControl>));
+                Associations = (List<NoteControl>)serializer.ReadObject(reader);
+            }
         }
     }
 }

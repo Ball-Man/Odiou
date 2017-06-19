@@ -53,7 +53,7 @@ namespace Controller
                 Note note = FFT.GetNote((int)Math.Round(transformed.Carrier));
 
                 //Updates UI
-                dispatcher.Invoke(() => txtNote.Text = (note).ToString());
+                dispatcher.Invoke(() => txtNote.Text = (note.ToString() == "C0"?"-":note.ToString()));
 
                 //Execute the command
                 Interpreter.Execute(FFT.GetNote((int)Math.Round(transformed.Carrier)));

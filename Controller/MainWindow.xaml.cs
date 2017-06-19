@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Numerics;
+using Microsoft.Win32;
 using Odiou;
 using WindowsInput;
 
@@ -69,10 +70,17 @@ namespace Controller
             cmbDevice.SelectedIndex = 0;
 
             interpreter = new NoteInterpreter();
-            interpreter.Associations.Add(new NoteControl(Note.Parse("D2"), VirtualKeyCode.VK_A, true, 0));
-            interpreter.Associations.Add(new NoteControl(Note.Parse("G2"), VirtualKeyCode.VK_D, true, 0));
             liveController.Interpreter = interpreter;
+            Bind();
+        }
+
+        /// <summary>
+        /// Binds and refreshes listbox
+        /// </summary>
+        private void Bind()
+        {
             lstCommands.ItemsSource = liveController.Interpreter.Associations;
+            lstCommands.Items.Refresh();
         }
 
         // ************* Menu ************* //
@@ -136,12 +144,50 @@ namespace Controller
                 bool keep = (bool)chcKeepInput.IsChecked;
                 int ms = int.Parse(txtDelayInput.Text);
 
+                SetDefaultInputCommand();
                 liveController.Interpreter.Associations.Add(new NoteControl(note, key, keep, ms));
                 lstCommands.Items.Refresh();
             }
             catch(Exception)
             {
                 message.ShowError("Wrong data", 1000);
+            }
+        }
+
+        private void btnSaveCommands_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "file xml(.xml)|*.xml|tutti i file|*.*";
+            dialog.DefaultExt = ".xml";
+            if ((bool)dialog.ShowDialog())
+            {
+                try
+                {
+                    liveController.Interpreter.Save(dialog.FileName);
+                }
+                catch(Exception)
+                {
+                    message.ShowError("Can't open the given file", 1000);
+                }
+            }
+        }
+
+        private void btnLoadCommands_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "file xml(.xml)|*.xml|tutti i file|*.*";
+            dialog.DefaultExt = ".xml";
+            if ((bool)dialog.ShowDialog())
+            {
+                try
+                {
+                    liveController.Interpreter.Load(dialog.FileName);
+                    Bind();
+                }
+                catch (Exception)
+                {
+                    message.ShowError("Can't open the given file", 1000);
+                }
             }
         }
 
@@ -155,6 +201,17 @@ namespace Controller
             lstCommands.IsEnabled = true;
 
             liveController.Stop();
+        }
+
+        /// <summary>
+        /// Sets input form to its default values
+        /// </summary>
+        private void SetDefaultInputCommand()
+        {
+            txtNoteInput.Text = "A0";
+            cmbKeyInput.SelectedIndex = 0;
+            chcKeepInput.IsChecked = false;
+            txtDelayInput.Text = "0";
         }
 
         // ************* Settings ************* //
@@ -182,7 +239,7 @@ namespace Controller
             StopLive();
             liveController = new LiveAudioController(new AudioRecorder(deviceID, freq, depth, channels, buffer), txtNote, this.Dispatcher);
             liveController.Interpreter = interpreter;
-            lstCommands.ItemsSource = liveController.Interpreter.Associations;
+            Bind();
 
             //Enables everything(everything is disabled till the user chooses the settings)
             menu.Enable(true);
