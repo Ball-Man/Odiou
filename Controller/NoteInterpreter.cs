@@ -36,7 +36,6 @@ namespace Controller
             Associations = new List<NoteControl>();
             _last = new Note(new RelativeNote('c', false), 0);
             _pushed = new Queue<VirtualKeyCode>();
-            ThreadPool.SetMaxThreads(1, 1);
         }
 
         /// <summary>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,7 +19,7 @@ using WindowsInput;
 namespace Controller
 {
     /// <summary>
-    /// Logica di interazione per MainWindow.xaml
+    /// Logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -119,6 +118,31 @@ namespace Controller
         private void btnStopLive_Click(object sender, RoutedEventArgs e)
         {
             StopLive();
+        }
+
+        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            liveController.Interpreter.Associations.Remove(button.DataContext as NoteControl);
+            lstCommands.Items.Refresh();
+        }
+
+        private void btnInput_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Note note = Note.Parse(txtNoteInput.Text);
+                VirtualKeyCode key = (VirtualKeyCode)cmbKeyInput.SelectedItem;
+                bool keep = (bool)chcKeepInput.IsChecked;
+                int ms = int.Parse(txtDelayInput.Text);
+
+                liveController.Interpreter.Associations.Add(new NoteControl(note, key, keep, ms));
+                lstCommands.Items.Refresh();
+            }
+            catch(Exception)
+            {
+                message.ShowError("Wrong data", 1000);
+            }
         }
 
         /// <summary>
