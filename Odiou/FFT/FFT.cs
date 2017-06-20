@@ -33,18 +33,18 @@ namespace Odiou
             for (int c = 1; c <= cycles; c++)
             {
                 int step = (int)Math.Pow(2, c);
-                for (int i = 0; i < buffer.Length; i += step)
+                for (int i = 0; i < buffer.Length; i += 1)
                 {
-                    for (int s = 0; s < step / 2; s++)
+                    if((i & (step / 2)) == 0)
                     {
-                        Complex even = buffer[i + s];
-                        Complex odd = buffer[i + s + (step / 2)];
+                        Complex even = buffer[i];
+                        Complex odd = buffer[i + step / 2];
 
-                        double w = -2 * Math.PI * s / step;
+                        double w = -2 * Math.PI * (i % step) / step;
                         odd *= new Complex(Math.Cos(w), Math.Sin(w));
 
-                        buffer[i + s] = even + odd;
-                        buffer[i + s + (step / 2)] = even - odd;
+                        buffer[i ] = even + odd;
+                        buffer[i + (step / 2)] = even - odd;
 
                     }
                 }

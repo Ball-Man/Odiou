@@ -17,7 +17,7 @@ namespace ConsoleTests
 
         static void Main(string[] args)
         {
-            TestNotes();
+            TestTransform();
             Console.ReadKey();
         }
 
